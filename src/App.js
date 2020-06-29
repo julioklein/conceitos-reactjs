@@ -16,7 +16,7 @@ function App() {
       title: `Novo projeto ${Date.now()}`,
       url: 'github.com',
       techs: ['React', 'Node']
-    })
+    });
 
     const repository = response.data;
 
@@ -24,22 +24,28 @@ function App() {
   }
 
   async function handleRemoveRepository(id) {
-    // TODO
+    // DONE
+    await api.delete(`repositories/${id}`);
+
+    const newRepositories = [...repositories];
+    const repositoryIndex = repositories.findIndex(repo => repo.id === id); 
+
+    newRepositories.splice(repositoryIndex, 1);
+    setRepositories(newRepositories);
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
         {repositories.map(repository => (
-          <li key={repository.id}>{repository.title}</li>
-        ))}
-        <li>
-          Repositório 1
+          <li key={repository.id}>
+            {repository.title}
 
-          <button onClick={() => handleRemoveRepository(1)}>
+            <button onClick={() => handleRemoveRepository(repository.id)}>
             Remover
-          </button>
-        </li>
+            </button>
+          </li>
+        ))}
       </ul>
 
       <button onClick={handleAddRepository}>Adicionar</button>
